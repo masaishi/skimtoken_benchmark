@@ -57,12 +57,26 @@ jobs:
           
           # Add results for each method
           for method in simple basic multilingual multilingual_simple; do
-            echo "#### ${method^} Method" >> README_new.md
-            echo "" >> README_new.md
-            echo '```' >> README_new.md
-            cat ${method}_results.txt >> README_new.md
-            echo '```' >> README_new.md
-            echo "" >> README_new.md
+            if [ "$method" = "multilingual_simple" ]; then
+              # Display multilingual_simple without collapsing
+              echo "#### ${method^} Method" >> README_new.md
+              echo "" >> README_new.md
+              echo '```' >> README_new.md
+              cat ${method}_results.txt >> README_new.md
+              echo '```' >> README_new.md
+              echo "" >> README_new.md
+            else
+              # Collapse other methods
+              echo "<details>" >> README_new.md
+              echo "<summary><h4>${method^} Method</h4></summary>" >> README_new.md
+              echo "" >> README_new.md
+              echo '```' >> README_new.md
+              cat ${method}_results.txt >> README_new.md
+              echo '```' >> README_new.md
+              echo "" >> README_new.md
+              echo "</details>" >> README_new.md
+              echo "" >> README_new.md
+            fi
           done
           
           # Add the bottom part of the README
