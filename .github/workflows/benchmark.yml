@@ -1,0 +1,99 @@
+name: Run Benchmark
+
+on:
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      
+      - name: Install dependencies
+        run: uv sync
+      
+      - name: Run all benchmarks
+        run: |
+          echo "Running benchmarks for all methods..."
+          
+          # Run benchmarks for each method
+          for method in simple basic multilingual multilingual_simple; do
+            echo "Running $method benchmark..."
+            uv run python benchmark.py -m $method > ${method}_results.txt
+            echo "Completed $method benchmark"
+            echo "---"
+          done
+          
+      - name: Update README with results
+        run: |
+          # Create a backup of the original README
+          cp README.md README_backup.md
+          
+          # Split the README at the benchmark results placeholder
+          # Get everything up to "### Latest Benchmark Results"
+          sed -n '1,/^### Latest Benchmark Results$/p' README.md > README_top.md
+          
+          # Get everything after the results section (starting from "## Requirements")
+          sed -n '/^## Requirements$/,$p' README.md > README_bottom.md
+          
+          # Build the new README
+          cat README_top.md > README_new.md
+          echo "" >> README_new.md
+          echo "_Last updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")_" >> README_new.md
+          echo "" >> README_new.md
+          
+          # Add results for each method
+          for method in simple basic multilingual multilingual_simple; do
+            echo "#### ${method^} Method" >> README_new.md
+            echo "" >> README_new.md
+            echo '```' >> README_new.md
+            cat ${method}_results.txt >> README_new.md
+            echo '```' >> README_new.md
+            echo "" >> README_new.md
+          done
+          
+          # Add the bottom part of the README
+          cat README_bottom.md >> README_new.md
+          
+          # Replace the original README
+          mv README_new.md README.md
+          
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update benchmark results [skip ci]" || echo "No changes to commit"
+          git push
+          
+      - name: Upload all results as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-all
+          path: |
+            *_results.txt
+            README.md
+            
+      - name: Display results in summary
+        run: |
+          echo "## Benchmark Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Generated on: $(date -u +"%Y-%m-%d %H:%M:%S UTC")_" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for method in simple basic multilingual multilingual_simple; do
+            echo "### ${method^} Method" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat ${method}_results.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          done
