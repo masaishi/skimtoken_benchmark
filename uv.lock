@@ -172,11 +172,11 @@ wheels = [
 
 [[package]]
 name = "skimtoken"
-version = "0.2.1"
+version = "0.2.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/76/e6/a35d242db976b44acf4ef1f4ed809c644d9c60da889457967d3959d33c92/skimtoken-0.2.1.tar.gz", hash = "sha256:b0593ea145d589be9a72a3ab8291499716ba91b524bf0ea0ce06a72483019bae", size = 215631 }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/ec/090eea9b57582dc2c1f6a5dc83356915e3fc03af11c8e7f8cde3dc39d26e/skimtoken-0.2.2.tar.gz", hash = "sha256:c1446237248d6b342cfe90ab7baab5f235cd28db9afdfe58d1e8ba774d5b6d0f", size = 213560 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/68/a6/4b2d0e258f677ec54e3fac0295c9ced707bd8691df9771f0335898d65127/skimtoken-0.2.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:33ddca9f1459b3e5c36ea716be0fb2c5ba8a02b4cb02fa6ca616de0f164ac4dc", size = 479823 },
+    { url = "https://files.pythonhosted.org/packages/78/32/dd328ffaf7e0f8608f2cf0ad78199f4fa7c8935d77ad9434a44a0694cefb/skimtoken-0.2.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:61968513b6d742b863a3cc1dacfad72e29f4ea6e833e208504db4fbe5a434db4", size = 478503 },
 ]
 
 [[package]]
@@ -198,7 +198,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "rich", specifier = ">=14.0.0" },
-    { name = "skimtoken", specifier = "==0.2.1" },
+    { name = "skimtoken", specifier = "==0.2.2" },
     { name = "tiktoken", specifier = ">=0.9.0" },
 ]
 
